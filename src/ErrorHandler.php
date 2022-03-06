@@ -6,21 +6,12 @@ use Closure;
 use ErrorException;
 use Throwable;
 
-/**
- * Class ErrorHandler
- *
- * @package AliReaza\ErrorHandler
- */
 class ErrorHandler
 {
     protected bool $debug;
     protected bool $add_trace;
     protected ?Closure $render = null;
 
-    /**
-     * @param bool $debug
-     * @param bool $add_trace
-     */
     public function register(bool $debug = false, bool $add_trace = false): void
     {
         $this->setDebug($debug);
@@ -31,25 +22,16 @@ class ErrorHandler
         register_shutdown_function([$this, 'handleFatal']);
     }
 
-    /**
-     * @param bool $debug
-     */
     public function setDebug(bool $debug = true): void
     {
         $this->debug = $debug;
     }
 
-    /**
-     * @param bool $add_trace
-     */
     public function addTrace(bool $add_trace = true): void
     {
         $this->add_trace = $add_trace;
     }
 
-    /**
-     * @param callable|Closure|string $render
-     */
     public function setRender(callable|Closure|string $render): void
     {
         if (is_string($render)) {
@@ -63,22 +45,11 @@ class ErrorHandler
         $this->render = $render;
     }
 
-    /**
-     * @param int    $severity
-     * @param string $message
-     * @param string $filename
-     * @param int    $line
-     *
-     * @throws ErrorException
-     */
     public function handleError(int $severity, string $message, string $filename, int $line): void
     {
         throw new ErrorException($message, 0, $severity, $filename, $line);
     }
 
-    /**
-     * @param Throwable $exception
-     */
     public function handleException(Throwable $exception): void
     {
         $errors = ['message' => 'Whoops, looks like something went wrong.'];
@@ -105,9 +76,6 @@ class ErrorHandler
         $render($errors, $exception);
     }
 
-    /**
-     * @throws ErrorException
-     */
     public function handleFatal(): void
     {
         $error = error_get_last();
@@ -117,11 +85,6 @@ class ErrorHandler
         }
     }
 
-    /**
-     * @param Throwable $exception
-     *
-     * @return array
-     */
     public function getTrace(Throwable $exception): array
     {
         $frames = $exception->getTrace();
@@ -134,12 +97,6 @@ class ErrorHandler
         return $frameData;
     }
 
-    /**
-     * @param Closure    $closure
-     * @param mixed|null $result
-     *
-     * @return Throwable|null
-     */
     public function call(Closure $closure, mixed &$result = null): ?Throwable
     {
         try {
@@ -151,11 +108,6 @@ class ErrorHandler
         return null;
     }
 
-    /**
-     * @param Throwable $throwable
-     *
-     * @return array
-     */
     public function getMessages(Throwable $throwable): array
     {
         $messages = [];
@@ -167,12 +119,6 @@ class ErrorHandler
         return $messages;
     }
 
-    /**
-     * @param Closure $closure
-     * @param null    $result
-     *
-     * @return array|null
-     */
     public function getMessagesByCall(Closure $closure, &$result = null): ?array
     {
         $throw = $this->call($closure, $result);

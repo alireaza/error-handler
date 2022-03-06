@@ -6,11 +6,6 @@ namespace AliReaza\Tests\ErrorHandler\Unit;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ErrorHandlerTest
- *
- * @package AliReaza\Tests\ErrorHandler\Unit
- */
 class ErrorHandlerTest extends TestCase
 {
     public function test_Coming_Soon()
